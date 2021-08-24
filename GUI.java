@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class GUI extends JFrame implements ActionListener
 {
-    // setting up ALL the variables
     JFrame window = new JFrame("Bardia's Tic Tac Toe Game");
 
     JMenuBar mnuMain = new JMenuBar();
@@ -41,10 +40,8 @@ public class GUI extends JFrame implements ActionListener
     boolean winOEnd = false;
     boolean catsGameEnd = false;
 
-    //===============================  GUI  ========================================//
-    public GUI() //This is the constructor
+    public GUI() 
     {
-        //Setting window properties:
         size = Integer.parseInt(JOptionPane.showInputDialog("What board dimensions do you want?"));
         board = new String [size][size];
         window.setSize(X, Y);
@@ -53,8 +50,6 @@ public class GUI extends JFrame implements ActionListener
         window.setLayout(new BorderLayout());
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 
-        //------------  Sets up Panels and text fields  ------------------------//
-        // setting Panel layouts and properties
         pnlNorth.setLayout(new FlowLayout(FlowLayout.CENTER));
         pnlSouth.setLayout(new FlowLayout(FlowLayout.CENTER));
 
@@ -72,7 +67,6 @@ public class GUI extends JFrame implements ActionListener
         radioPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Who Goes First?"));
 
-        // adding menu items to menu bar
         mnuMain.add(mnuGameTitle);
         mnuGameTitle.setEnabled(false);
         mnuGameTitle.setFont(new Font("Purisa",Font.BOLD,18));
@@ -83,7 +77,6 @@ public class GUI extends JFrame implements ActionListener
         mnuMain.add(mnuExit);
         mnuExit.setFont(new Font("Purisa",Font.BOLD,18));//---->Menu Bar Complete
 
-        // adding X & O options to menu
         SelectX.setFont(new Font("Purisa",Font.BOLD,18));
         SelectO.setFont(new Font("Purisa",Font.BOLD,18));
         radioGroup = new ButtonGroup(); // create ButtonGroup
@@ -92,12 +85,10 @@ public class GUI extends JFrame implements ActionListener
         radioPanel.add(SelectX);
         radioPanel.add(SelectO);
 
-        // adding Action Listener to all the Buttons and Menu Items
         mnuNewGame.addActionListener(this);
         mnuExit.addActionListener(this);
         mnuStartingPlayer.addActionListener(this);
 
-        // setting up the playing field
         pnlPlayingField.setLayout(new GridLayout(size, size, size-1, size-1));
         pnlPlayingField.setBackground(Color.black);
         btnEmpty = new JButton[(size*size)+1];
@@ -110,23 +101,18 @@ public class GUI extends JFrame implements ActionListener
             btnEmpty[x].setEnabled(setTableEnabled);
         }
 
-        // adding everything needed to pnlNorth and pnlSouth
         pnlNorth.add(mnuMain);
         BusinessLogic.ShowGame(pnlSouth,pnlPlayingField);
 
-        // adding to window and Showing window
         window.add(pnlNorth, BorderLayout.NORTH);
         window.add(pnlSouth, BorderLayout.CENTER);
         window.setVisible(true);
-    }// End GUI
+    }
 
-    // ===========  Start Action Performed  ===============//
     public void actionPerformed(ActionEvent click)  
     {
-        // get the mouse click from the user
         Object source = click.getSource();
 
-        // check if a button was clicked on the gameboard
         for(int currentMove=1; currentMove <= size*size; ++currentMove) 
         {
             if(source == btnEmpty[currentMove] && remainingMoves < (size*size)+1)  
@@ -140,7 +126,6 @@ public class GUI extends JFrame implements ActionListener
             }
         }
 
-        // if a button was clicked on the gameboard, check for a winner
         if(btnEmptyClicked) 
         {
             inGame = true;
@@ -171,7 +156,6 @@ public class GUI extends JFrame implements ActionListener
             inGame = false;
             startingPlayer = "";
             setTableEnabled = false;
-            // redraw the gameboard to its initial state
             if(!inGame) 
             {
                 RedrawGameBoard();
@@ -195,7 +179,6 @@ public class GUI extends JFrame implements ActionListener
             }
 
         }
-        // check if the user clicks on a menu item
         if(source == mnuNewGame)    
         {
             System.out.println(startingPlayer);
@@ -225,7 +208,6 @@ public class GUI extends JFrame implements ActionListener
                         BusinessLogic.ShowGame(pnlSouth,pnlPlayingField);
                     }
                 }
-                // redraw the gameboard to its initial state
                 if(!inGame) 
                 {
                     RedrawGameBoard();
@@ -242,7 +224,6 @@ public class GUI extends JFrame implements ActionListener
                 System.exit(0);
             }
         }
-        // select X or O player 
         else if(source == mnuStartingPlayer)  
         {
             if(inGame)  
@@ -271,9 +252,7 @@ public class GUI extends JFrame implements ActionListener
         }
         pnlSouth.setVisible(false); 
         pnlSouth.setVisible(true);  
-    }// End Action Performed
 
-    // ===========  Start RadioListener  ===============//  
     private class RadioListener implements ActionListener 
     {
         public void actionPerformed(ActionEvent event) 
@@ -293,12 +272,8 @@ public class GUI extends JFrame implements ActionListener
             pnlSouth.setVisible(true);          
             RedrawGameBoard();
         }
-    }// End RadioListener
-    /*
-    ----------------------------------
-    Start of all the other methods. |
-    ----------------------------------
-     */
+    }
+
     private void RedrawGameBoard()  
     {
         BusinessLogic.ClearPanelSouth(pnlSouth,pnlTop,pnlNewGame,
@@ -367,32 +342,21 @@ public class GUI extends JFrame implements ActionListener
         boolean notWin = false;
         if(x == 0)
         {
-            //System.out.println("Player has won");
-            //System.out.println("XAcross?");
             return win;
         }
         int y = checkWinXDown(board);
         if(y == 0)
         {
-            //System.out.println("Player has won");
-            //System.out.println("");
-            //System.out.println("XDown?");
             return win;
         }
         int z = checkWinXForwardDiagonal(board);
         if(z == 0)
         {
-            //System.out.println("Player has won");
-            //System.out.println("");
-            // System.out.println("FDiag");
             return win;
         }
         int u = checkWinXBackDiagonal(board);
         if(u == 0)
         {
-            //System.out.println("Player has won");
-            //System.out.println("");
-            //System.out.println("BDiag");
             return win;
         }
         return notWin;
@@ -499,7 +463,6 @@ public class GUI extends JFrame implements ActionListener
             }
         }
         
-        // printBoard(board);
         if(count == board.length-1)
         {
 
